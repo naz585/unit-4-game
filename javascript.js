@@ -1,19 +1,19 @@
-
+//global variables
 var hero;
 var boss;
 var warrior1 = {
     hp: 200,
-    attack: 5
+    attack: 6
 };
 
 var mage1 = {
     hp: 100,
-    attack: 10
+    attack: 15
 };
 
 var DK1 = {
     hp: 150,
-    attack: 7
+    attack: 9
 };
 
 var boss3 = {
@@ -37,18 +37,21 @@ var boss2 = {
 
 
 
-
-
+var bossArray = ["boss1", "boss2", "boss3"];
+var counter = 0;
 var characterSelected;
 var bossSelected;
 var userPick = false;
 var bossPick = false;
+var player;
+var opponant;
+//hidden elements for bosses
 $(".btn1").hide();
 $(".boss").hide();
 
 
 
-
+//click function for hero selection
 $(".Hero").click(function () {
     characterSelected = event.target.alt;
     console.log(characterSelected);
@@ -64,7 +67,7 @@ console.log(characterSelected);
 
 
 
-
+//start function after hero and boss are selected
 function Gamestart() {
     if (userPick && bossPick) {
         console.log("gamestart test")
@@ -83,7 +86,7 @@ function Gamestart() {
 
 
 
-
+//animation function
 function animate() {
     if (characterSelected === "warrior") {
         characterSelected = $(".war")
@@ -139,10 +142,12 @@ function animate() {
         $(".Baal").animate({ height: "200px", width: "200px" }, "slow");
 
     }
-
+   
 
 }
 
+
+//boss click function
 function theBoss() {
     bossPick;
     bossSelected;
@@ -154,14 +159,16 @@ function theBoss() {
         bossPick = true;
         animate()
         Gamestart()
+        update()
     });
 
 }
-
+//attacking function
 function attack() {
-    var player = hero;
-    var opponant = boss;
-    var counter = 1;
+    player = hero;
+    opponant = boss;
+   counter;
+   $(".HP").text("boss HP: " + opponant.hp+"   Hero HP: "+player.hp);
     $(".attacker").click(function () {
         counter++;
         player.hp = player.hp - opponant.attack
@@ -169,16 +176,22 @@ function attack() {
         console.log("counter: " + counter);
         console.log(player.hp);
         console.log(opponant.hp);
+        $(".HP").text("boss HP: " + opponant.hp+"   Hero HP: "+player.hp);
         update();
     });
 
 };
 
+
+//update page function
 function update() {
 
     if (boss.hp < 0) {
         $("." + boss.name).fadeOut("slow");
         $(".attacker").prop("disabled", true);
+        bossArray.splice(bossArray.indexOf(boss.name),1);
+        $( ".attacker" ).off();
+        show();
     }
     else {
         $(".attacker").prop("disabled", false);
@@ -188,8 +201,12 @@ function update() {
 
 };
 
+
+
 function show() {
-
-
+for(var i=0; i<bossArray.length; i++){
+ $("."+ bossArray[i]).fadeIn("slow")
+}
+ animate()
 
 }
